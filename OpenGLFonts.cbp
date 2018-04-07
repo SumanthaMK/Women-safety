@@ -34,7 +34,6 @@
 			<Add option="-Wextra" />
 			<Add option="-Wall" />
 			<Add option="-std=c11" />
-			<Add option="-Werror" />
 		</Compiler>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
