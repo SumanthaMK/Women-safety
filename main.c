@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <GL/freeglut.h>
 #include <unistd.h>
-int screen = 0,x=-150;
+int screen = 0,x=-150,flag=0;
 GLfloat vertices[][3] ={{160,390-50,-70},{425,390-50,-70},
 					{425,510-50,-70}, {160,520-50,-70},
 
@@ -337,7 +337,7 @@ void road2d()
     //int x;
     glColor3d(1,1,1);
     glEnable(GL_LINE_STIPPLE);
-    glLineStipple(1,0x00FF);;
+    glLineStipple(1,0x00FF);
     glBegin(GL_LINES);
         glVertex2d(0,280);
         glVertex2d(1000,280);
@@ -403,12 +403,13 @@ void woman()
 {
 	//face
 	glColor3ub(0,0,0);
+	glTranslatef(0, 0, -10);
 	glPushMatrix();
 	glTranslatef(540,495-30,0);
 	glutSolidTorus(1,10,100-30,90);
 	glPopMatrix();
 	glColor3ub(255,191,128);
-glPushMatrix();
+    glPushMatrix();
 	glTranslatef(540,494-30,0);
 	glutSolidTorus(7,7,100-30,90);
 	glPopMatrix();
@@ -837,25 +838,12 @@ void scene_1()
     bus_stop();
     lamp_post();
     road2d();
-     woman();
     man();
-    colorcube();
-    //glTranslated(0,10,0);
-
+    if(flag == 1)
+        bus_move();
+    if(x == 250)
+        woman();
     glPopMatrix();
-    /*while(x<=50) {
-        x += 3;
-        glPushMatrix();
-        glTranslated(x,0,0);
-        //wheel1();
-        colorcube();
-        //wheel2();
-        glPopMatrix();
-        //sleep(0.5);
-    }*/
-    /*sleep(10);
-    screen=2;
-    display();*/
 }
 
 void scene_2()
@@ -892,7 +880,6 @@ void scene_3()
     glPushMatrix();
     //glScaled(-10,-10,-10);
     colorcube();
-
     glPopMatrix();
     glPopMatrix();
 
@@ -908,7 +895,6 @@ void scene_4()
 void scene_5()
 {
     glPushMatrix();
-
     road2d();
     glPushMatrix();
     glTranslated(200,0,0);
@@ -918,7 +904,6 @@ void scene_5()
     glTranslated(300,0,0);
     man();
     glPopMatrix();
-
     glPopMatrix();
 
 
@@ -927,7 +912,6 @@ void scene_5()
 void scene_6()
 {
     glPushMatrix();
-
     road2d();
     glPushMatrix();
     glTranslated(100,0,0);
@@ -944,10 +928,33 @@ void scene_6()
     glutSolidCube(3.0);
     glPopMatrix();
     glPopMatrix();
-
-
 }
 
+void bus_move()
+{
+    if(x>250)
+        woman();
+    if(x<1000)
+    {
+        x += 2;
+        glPushMatrix();
+        glTranslatef(x,0,0);
+        wheel1();
+        colorcube();
+        wheel2();
+        glPopMatrix();
+    }
+    if (x == 250) sleep(2);
+}
+
+void keys(unsigned char key,int x,int y)
+{
+    if(key == 'x' && screen == 1)
+    {
+        flag = 1;
+        glutPostRedisplay();
+    }
+}
 void reshape(int w,int h)
 {
     glViewport(0,0,w,h);
@@ -989,14 +996,16 @@ void display(void)
 int main(int argc, char* argv[])
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     glutInitWindowSize(1000,650);
     glutInitWindowPosition(0,0);
+    glEnable(GL_DEPTH_TEST);
     glutCreateWindow("CG Project");
     glutDisplayFunc(display);
     glutIdleFunc(display);
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse);
+    glutKeyboardFunc(keys);
     glutMainLoop();
     return 0;
 }
