@@ -841,8 +841,6 @@ void scene_1()
     man();
     if(flag == 1)
         bus_move();
-    if(x == 250)
-        woman();
     glPopMatrix();
 }
 
