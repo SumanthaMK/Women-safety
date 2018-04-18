@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <GL/freeglut.h>
 #include <unistd.h>
-int screen = 0,x=-150,flag=0;
+int screen = 0,x=-150,flag=0,x1=12,y1=52,flag1=0;
 GLfloat vertices[][3] ={{160,390-50,-70},{425,390-50,-70},
 					{425,510-50,-70}, {160,520-50,-70},
 
@@ -905,6 +905,41 @@ void building()
     glPopMatrix();
 }
 
+void scene2_translate()
+{
+    if(x1<=230)
+    {
+        x1 += 1;
+        glPushMatrix();
+        glTranslatef(x1,0,0);
+        woman();
+        glPopMatrix();
+    }
+    if(y1<=310)
+    {
+        y1 += 1.5;
+        glPushMatrix();
+        glTranslatef(y1,0,0);
+        man();
+        glPopMatrix();
+    }
+    if(x1>230)
+    {
+        drawBitmapText1("Press left mouse button to move to next screen",10,20);
+        glPushMatrix();
+        glTranslatef(230,0,0);
+        woman();
+        glPopMatrix();
+    }
+    if(y1>310)
+    {
+        glPushMatrix();
+        glTranslatef(350,0,0);
+        man();
+        glPopMatrix();
+    }
+}
+
 void scene_1()
 {
     glPushMatrix();
@@ -925,14 +960,22 @@ void scene_2()
     bus_stop();
     lamp_post();
     road2d();
-    glPushMatrix();
-    glTranslated(200,0,0);
-    woman();
-    glPopMatrix();
-    glPushMatrix();
-    glTranslated(310,0,0);
-    man();
-    glPopMatrix();
+    if(x1 == 12)
+    {
+        glPushMatrix();
+        glTranslatef(8,0,0);
+        woman();
+        glPopMatrix();
+    }
+    if(y1 == 52)
+    {
+        glPushMatrix();
+        glTranslatef(8,0,0);
+        man();
+        glPopMatrix();
+    }
+    if(flag1 == 1)
+        scene2_translate();
     glPopMatrix();
 
 }
@@ -959,7 +1002,7 @@ void scene_3()
 void scene_4()
 {
 
-
+// waav
 }
 
 void scene_5()
@@ -1015,11 +1058,9 @@ void bus_move()
 void keys(unsigned char key,int x,int y)
 {
     if(key == 'x' && screen == 1)
-    {
         flag = 1;
-        glColor3f(1,1,1);
-        drawBitmapText1(" ",50,20);
-    }
+    if(key == 'x' && screen == 2)
+        flag1 = 1;
 }
 void reshape(int w,int h)
 {
