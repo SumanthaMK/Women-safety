@@ -54,6 +54,20 @@ void drawBitmapText1(char *string, float x, float y)
     }
 }
 
+void text()
+{
+    if(screen == 1 && flag == 0)
+    {
+        glColor3f(1,1,1);
+        drawBitmapText1("Press x to start the scene",50,20);
+    }
+    if(screen == 1 && flag == 1 && x == 1000)
+    {
+        glColor3f(1,1,1);
+        drawBitmapText1("Press left mouse button to move to next scene",50,20);
+    }
+}
+
 void mouse(int btn,int state,int x,int y)
 {
     if(btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
@@ -573,6 +587,17 @@ void woman()
 		glVertex2i(514,410-30);
     glEnd();
 
+    //texture for skirt
+    int i,k=0;
+    for(i=1;i<40;i+=5)
+    {
+        glBegin(GL_LINES);
+            glColor3f(0,0,1);
+            glVertex2d(522+i,380+i/20);
+            glVertex2d(522+i,410+i/20);
+        glEnd();
+    }
+
     //shoe left
 	glBegin(GL_POLYGON);
         glColor3ub(180,0,0);
@@ -596,6 +621,17 @@ void woman()
         glVertex2i(568,396-30);
         glVertex2i(560,405-30);
 	glEnd();
+
+	// buttons
+	glColor3ub(0,0,0);
+	glPushMatrix();
+	glTranslatef(540,465-30,0);
+	glutSolidTorus(1,1,100-30,90);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(540,458-30,0);
+	glutSolidTorus(1,1,100-30,90);
+	glPopMatrix();
 }
 
 void man()
@@ -748,16 +784,16 @@ void man()
     // buttons
 	glColor3ub(0,0,0);
 	glPushMatrix();
-	glTranslatef(540-220,465+76-30-76,0);
-	glutSolidTorus(1,1,100-30-76,90);
+	glTranslatef(540-220,465-30,0);
+	glutSolidTorus(1,1,100-30,90);
 	glPopMatrix();
 	glPushMatrix();
-	glTranslatef(540-220,458+76-30-76,0);
-	glutSolidTorus(1,1,100-30-76,90);
+	glTranslatef(540-220,458-30,0);
+	glutSolidTorus(1,1,100-30,90);
 	glPopMatrix();
 	glPushMatrix();
-	glTranslatef(540-220,451+76-30-76,0);
-	glutSolidTorus(1,1,100-30-76,90);
+	glTranslatef(540-220,451-30,0);
+	glutSolidTorus(1,1,100-30,90);
 	glPopMatrix();
 
 	// pant
@@ -828,6 +864,25 @@ void colorcube()
     wheel2();
 }
 
+void bus_move()
+{
+    if(x>250)
+        woman();
+    if(x<1000)
+    {
+        x += 2;
+        glPushMatrix();
+        glTranslatef(x,0,0);
+        wheel1();
+        colorcube();
+        wheel2();
+        glPopMatrix();
+    }
+    if(x == 250) sleep(2);
+    if(x == 1000)
+        text();
+}
+
 void window()
 {
     glBegin(GL_POLYGON);
@@ -871,11 +926,11 @@ void building()
     glPushMatrix();
     for(i=1;i<150;i+=25)
     {
-        glBegin(GL_POLYGON);
-            glVertex2d(545+i,583-i/2.5);
-            glVertex2d(545+i,168-i/2.5);
-            glVertex2d(547+i,581-i/2.5);
-            glVertex2d(547+i,168-i/2.5);
+        glBegin(GL_LINES);
+            glVertex2d(545+i,582-i/2.5);
+            glVertex2d(545+i,272-i/2.5);
+            glVertex2d(547+i,582-i/2.5);
+            glVertex2d(547+i,272-i/2.5);
         glEnd();
     }
     glPopMatrix();
@@ -905,6 +960,29 @@ void building()
     glPopMatrix();
 }
 
+void tree()
+{
+    glBegin(GL_TRIANGLES);
+        glColor3f(0,1,0);
+        glVertex2d(30,430);
+        glVertex2d(140,430);
+        glVertex2d(85,500);
+        glVertex2d(40,480);
+        glVertex2d(130,480);
+        glVertex2d(85,550);
+        glVertex2d(50,530);
+        glVertex2d(120,530);
+        glVertex2d(85,600);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glColor3f(0.7,0,0);
+        glVertex2d(80,380);
+        glVertex2d(90,380);
+        glVertex2d(90,430);
+        glVertex2d(80,430);
+    glEnd();
+}
+
 void scene2_translate()
 {
     if(x1<=230)
@@ -925,7 +1003,8 @@ void scene2_translate()
     }
     if(x1>230)
     {
-        drawBitmapText1("Press left mouse button to move to next screen",10,20);
+        glColor3f(1,1,1);
+        drawBitmapText1("Press left mouse button to move to next screen",50,20);
         glPushMatrix();
         glTranslatef(230,0,0);
         woman();
@@ -947,8 +1026,12 @@ void scene_1()
     lamp_post();
     road2d();
     man();
-    glColor3f(1,1,1);
-    drawBitmapText1("Press x to start the scene",50,20);
+    tree();
+    text();
+    glPushMatrix();
+    glTranslatef(800,0,0);
+    tree();
+    glPopMatrix();
     if(flag == 1)
         bus_move();
     glPopMatrix();
@@ -960,6 +1043,11 @@ void scene_2()
     bus_stop();
     lamp_post();
     road2d();
+    tree();
+    glPushMatrix();
+    glTranslatef(800,0,0);
+    tree();
+    glPopMatrix();
     if(x1 == 12)
     {
         glPushMatrix();
@@ -1033,28 +1121,6 @@ void scene_6()
     building();
 }
 
-void bus_move()
-{
-    if(x>250)
-        woman();
-    if(x<1000)
-    {
-        x += 2;
-        glPushMatrix();
-        glTranslatef(x,0,0);
-        wheel1();
-        colorcube();
-        wheel2();
-        glPopMatrix();
-    }
-    if(x == 250) sleep(2);
-    if(x == 1000)
-    {
-        glColor3f(1,1,1);
-        drawBitmapText1("Press left mouse button to move to next scene",50,20);
-    }
-}
-
 void keys(unsigned char key,int x,int y)
 {
     if(key == 'x' && screen == 1)
@@ -1062,6 +1128,7 @@ void keys(unsigned char key,int x,int y)
     if(key == 'x' && screen == 2)
         flag1 = 1;
 }
+
 void reshape(int w,int h)
 {
     glViewport(0,0,w,h);
