@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <GL/freeglut.h>
 #include <unistd.h>
-int screen = 0,x=-150,flag=0,x1=12,y1=52,flag1=0;
+int screen = 0,x=-150,flag=0,x1=12,y1=52,flag1=0,x2=-150,flag2=0;
 GLfloat vertices[][3] ={{160,390-50,-70},{425,390-50,-70},
 					{425,510-50,-70}, {160,520-50,-70},
 
@@ -62,6 +62,16 @@ void text()
         drawBitmapText1("Press x to start the scene",50,20);
     }
     if(screen == 1 && flag == 1 && x == 1000)
+    {
+        glColor3f(1,1,1);
+        drawBitmapText1("Press left mouse button to move to next scene",50,20);
+    }
+    if(screen == 3 && flag2 == 0)
+    {
+        glColor3f(1,1,1);
+        drawBitmapText1("Press x to start the scene",50,20);
+    }
+    if(screen == 3 && flag2 == 1 && x2 == 1000)
     {
         glColor3f(1,1,1);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
@@ -1019,6 +1029,86 @@ void scene2_translate()
     }
 }
 
+void car()
+{
+    glPushMatrix();
+    glColor3f(1,1,0);
+    glTranslatef(383,344,0);
+	glutSolidTorus(3,3,200,190);
+	glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-10,-10,0);
+    wheel1();
+    glPopMatrix();
+    glBegin(GL_POLYGON);
+        glColor3f(0.3,0,0);
+        glVertex2d(110,310);
+        glVertex2d(380,310);
+        glVertex2d(380,370);
+        glVertex2d(110,370);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex2d(160,370);
+        glVertex2d(180,420);
+        glVertex2d(300,420);
+        glVertex2d(320,370);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glColor3ub(80,80,80);
+        glVertex2d(170,375);
+        glVertex2d(185,415);
+        glColor3ub(150,150,150);
+        glVertex2d(235,415);
+        glVertex2d(235,375);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glColor3ub(80,80,80);
+        glVertex2d(245,375);
+        glVertex2d(310,375);
+        glColor3ub(150,150,150);
+        glVertex2d(295,415);
+        glVertex2d(245,415);
+    glEnd();
+    glPushMatrix();
+    glColor3f(1,1,0);
+    glTranslatef(381,340,0);
+	glutSolidTorus(3,3,200,190);
+	glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-10,-10,0);
+    wheel2();
+    glPopMatrix();
+    glBegin(GL_POLYGON);
+        glVertex2d(100,320);
+        glVertex2d(110,320);
+        glVertex2d(110,330);
+        glVertex2d(100,330);
+    glEnd();
+}
+
+void car_move()
+{
+    if(x2<1000)
+    {
+        x2 += 5;
+        glPushMatrix();
+        glTranslatef(x2,0,0);
+        car();
+        glPopMatrix();
+    }
+    if(x2 == 400) sleep(2);
+    if(x2 > 400)
+    {
+        glPushMatrix();
+        glTranslatef(1000,0,0);
+        woman();
+        man();
+        glPopMatrix();
+    }
+    if(x2 == 1000)
+        text();
+}
+
 void scene_1()
 {
     glPushMatrix();
@@ -1072,18 +1162,20 @@ void scene_3()
 {
     glPushMatrix();
     road2d();
-    glPushMatrix();
-    glTranslated(200,0,0);
-    woman();
-    glPopMatrix();
-    glPushMatrix();
-    glTranslated(360,0,0);
-    man();
-    glPopMatrix();
-    glPushMatrix();
-    glScaled(0.8,0.8,0);
-    colorcube();
-    glPopMatrix();
+    text();
+    if(x2 < 390)
+    {
+        glPushMatrix();
+        glTranslated(200,0,0);
+        woman();
+        glPopMatrix();
+        glPushMatrix();
+        glTranslated(360,0,0);
+        man();
+        glPopMatrix();
+    }
+    if(flag2 == 1)
+        car_move();
     glPopMatrix();
 }
 
@@ -1127,6 +1219,8 @@ void keys(unsigned char key,int x,int y)
         flag = 1;
     if(key == 'x' && screen == 2)
         flag1 = 1;
+    if(key == 'x' && screen == 3)
+        flag2 = 1;
 }
 
 void reshape(int w,int h)
