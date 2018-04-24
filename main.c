@@ -2,7 +2,13 @@
 #include <stdlib.h>
 #include <GL/freeglut.h>
 #include <unistd.h>
-int screen = 0,x=-150,flag=0,x1=12,y1=52,flag1=0,x2=-150,flag2=0;
+
+#include<GL/glut.h>
+#include<SOIL/SOIL.h>
+#include<string.h>
+GLuint tex_2d, tex_2d1, tex_2d2;
+
+int screen = 0,x=-150,flag=0,x1=12,_y1=52,flag1=0,x2=-150,flag2=0;
 GLfloat vertices[][3] ={{160,390-50,-70},{425,390-50,-70},
 					{425,510-50,-70}, {160,520-50,-70},
 
@@ -34,6 +40,60 @@ GLfloat verticesd[][3] ={{160,390-175,-70},{425,390-175,-70},
 {380,520-175,-70},{380,390-175,-70},{320,390-175,-70}};
 
 GLfloat colorsd[][3] = {{1.0,1.0,0.0},{0.0,0.6,0.7},{.3,.4,.5}};
+
+void frontpg()
+{
+	glEnable(GL_TEXTURE_2D);
+
+		/*background*/
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	tex_2d2 = SOIL_load_OGL_texture
+		 (
+			 "bg.png",
+			 SOIL_LOAD_AUTO,
+			 SOIL_CREATE_NEW_ID,
+			 SOIL_FLAG_COMPRESS_TO_DXT
+		 );
+	glBindTexture(GL_TEXTURE_2D, tex_2d2);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBegin(GL_POLYGON);
+		glTexCoord2f(1.0, 1.0);
+		glVertex2f(1000,415);
+		glTexCoord2f(0.0, 1.0);
+		glVertex2f(0,415);
+		glTexCoord2f(0.0, 0.0);
+		glVertex2f(0,650);
+		glTexCoord2f(1.0, 0.0);
+		glVertex2f(1000,650);
+	glEnd();
+
+/*sidewalk*/
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	tex_2d2 = SOIL_load_OGL_texture
+		 (
+			 "sidewalk.png",
+			 SOIL_LOAD_AUTO,
+			 SOIL_CREATE_NEW_ID,
+			 SOIL_FLAG_COMPRESS_TO_DXT
+		 );
+	glBindTexture(GL_TEXTURE_2D, tex_2d2);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBegin(GL_POLYGON);
+		glTexCoord2f(1.0, 1.0);
+		glVertex2f(1000,350);
+		glTexCoord2f(0.0, 1.0);
+		glVertex2f(0,350);
+		glTexCoord2f(0.0, 0.0);
+		glVertex2f(0,415);
+		glTexCoord2f(1.0, 0.0);
+		glVertex2f(1000,415);
+	glEnd();
+
+
+    glDisable(GL_TEXTURE_2D);
+    //glutSwapBuffers();
+    //glFlush();
+}
 
 void drawStrokeText(char *string, int x, int y, int z)
 {
@@ -80,7 +140,7 @@ void text()
         glColor3f(1,1,1);
         drawBitmapText1("Press x to start the scene",50,20);
     }
-    if(screen == 2 && flag1 == 1 && y1 > 310)
+    if(screen == 2 && flag1 == 1 && _y1 > 310)
     {
         glColor3f(1,1,1);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
@@ -122,14 +182,14 @@ void first_screen()
 void bus_stop()
 {
 //ground
-    glColor3ub(100,100,100);
+    glColor3ub(180,180,180);
     glBegin(GL_POLYGON);
         glVertex3i(340-200,400,-110);
         glVertex3i(680-200,400,-110);
         glVertex3i(710-200,430,-240);
         glVertex3i(370-200,430,-240);
     glEnd();
-    glColor3ub(100,100,100);
+    glColor3ub(180,180,180);
     glBegin(GL_POLYGON);
         glVertex3i(340-200,400,-110);
         glVertex3i(680-200,400,-110);
@@ -1229,11 +1289,11 @@ void scene2_translate()
         woman();
         glPopMatrix();
     }
-    if(y1<=310)
+    if(_y1<=310)
     {
-        y1 += 1.5;
+        _y1 += 1.5;
         glPushMatrix();
-        glTranslatef(y1,0,0);
+        glTranslatef(_y1,0,0);
         man();
         glPopMatrix();
     }
@@ -1245,7 +1305,7 @@ void scene2_translate()
         woman();
         glPopMatrix();
     }
-    if(y1>310)
+    if(_y1>310)
     {
         glPushMatrix();
         glTranslatef(350,0,0);
@@ -1632,6 +1692,10 @@ void pepper_spray()
 void scene_1()
 {
     glPushMatrix();
+	frontpg();
+    glPopMatrix();
+
+    glPushMatrix();
     bus_stop();
     lamp_post();
     road2d();
@@ -1655,6 +1719,10 @@ void scene_1()
 void scene_2()
 {
     glPushMatrix();
+	frontpg();
+    glPopMatrix();
+
+    glPushMatrix();
     bus_stop();
     lamp_post();
     road2d();
@@ -1676,7 +1744,7 @@ void scene_2()
         woman();
         glPopMatrix();
     }
-    if(y1 == 52)
+    if(_y1 == 52)
     {
         glPushMatrix();
         glTranslatef(8,0,0);
@@ -1690,6 +1758,10 @@ void scene_2()
 
 void scene_3()
 {
+    glPushMatrix();
+	frontpg();
+    glPopMatrix();
+
     glPushMatrix();
     road2d();
     text();
@@ -1717,6 +1789,10 @@ void scene_4()
 
 void scene_5()
 {
+    glPushMatrix();
+	frontpg();
+    glPopMatrix();
+
     glPushMatrix();
     road2d();
     glPushMatrix();
@@ -1746,6 +1822,10 @@ void scene_5()
 
 void scene_6()
 {
+    glPushMatrix();
+	frontpg();
+    glPopMatrix();
+
     glPushMatrix();
     glTranslated(-100,-90,0);
     woman();
@@ -1830,4 +1910,3 @@ int main(int argc, char* argv[])
     glutMainLoop();
     return 0;
 }
-
