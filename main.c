@@ -349,6 +349,9 @@ void bus_stop()
         glVertex3i(700-200,550,-120);
         glVertex3i(700-200,530,-120);
     glEnd();
+
+    //text
+    drawBitmapText1("BUS STOP",280,530);
 }
 
 void lamp_post()
@@ -1689,6 +1692,26 @@ void pepper_spray()
     glEnd();
 }
 
+void road()
+{
+    glColor3d(0.1,0.1,0.1);
+    glBegin(GL_POLYGON);
+        glVertex2d(0,200);
+        glVertex2d(0,350);
+        glVertex2d(700,350);
+        glVertex2d(700,200);
+    glEnd();
+    //int x;
+    glColor3d(1,1,1);
+    glEnable(GL_LINE_STIPPLE);
+    glLineStipple(1,0x00FF);
+    glBegin(GL_LINES);
+        glVertex2d(0,280);
+        glVertex2d(700,280);
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
+}
+
 void scene_1()
 {
     glPushMatrix();
@@ -1783,8 +1806,8 @@ void scene_3()
 
 void scene_4()
 {
-
-// waav
+    glColor3f(1,1,1);
+    drawBitmapText1("Press right mouse button to view the menu",50,20);
 }
 
 void scene_5()
@@ -1825,23 +1848,32 @@ void scene_6()
     glPushMatrix();
 	frontpg();
     glPopMatrix();
-
+    road();
     glPushMatrix();
-    glTranslated(-100,-90,0);
+    glTranslated(10,-100,0);
     woman();
     glPopMatrix();
     glPushMatrix();
-    glTranslated(-20,-90,0);
+    glTranslated(60,-100,0);
     man();
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0,-90,0);
+    glScalef(-100,0,0);
     road2d();
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(150,-5,0);
+    glTranslatef(200,35,0);
     building();
     glPopMatrix();
+}
+
+void scene_7()
+{
+    glColor3f(1,1,0);
+    glLineWidth(3.0);
+    drawStrokeText("Respect",350+40,350,0);
+    drawStrokeText("Women",380+60,300,0);
 }
 
 void keys(unsigned char key,int x,int y)
@@ -1852,6 +1884,24 @@ void keys(unsigned char key,int x,int y)
         flag1 = 1;
     if(key == 'x' && screen == 3)
         flag2 = 1;
+}
+
+void menu(int id)
+{
+    if(screen == 4 || screen == 5 || screen == 6)
+    {
+        switch(id)
+        {
+            case 1: screen = 1;
+                    break;
+            case 2: screen = 5;
+                    break;
+            case 3: screen = 6;
+                    break;
+            default: exit(0);
+        }
+    }
+    glutPostRedisplay();
 }
 
 void reshape(int w,int h)
@@ -1889,6 +1939,8 @@ void display(void)
         scene_5();
     if(screen==6)
         scene_6();
+    if(screen==7)
+        scene_7();
     glutSwapBuffers();
 }
 
@@ -1902,6 +1954,13 @@ int main(int argc, char* argv[])
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glutCreateWindow("CG Project");
+    int submenu = glutCreateMenu(menu);
+    glutAddMenuEntry("Female perspective",2);
+    glutAddMenuEntry("Male perspective",3);
+    glutCreateMenu(menu);
+    glutAddMenuEntry("Move back to scene 1",1);
+    glutAddSubMenu("What should be done?",submenu);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
     glutDisplayFunc(display);
     glutIdleFunc(display);
     glutReshapeFunc(reshape);
