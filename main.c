@@ -8,7 +8,7 @@
 #include<string.h>
 GLuint tex_2d, tex_2d1, tex_2d2;
 
-int screen = 0,x=-150,flag=0,x1=12,_y1=52,flag1=0,x2=-150,flag2=0;
+int screen = 0,x=-150,flag=0,x1=12,_y1=52,flag1=0,x2=-150,flag2=0,flag4=0,x4=0;
 GLfloat vertices[][3] ={{160,390-50,-70},{425,390-50,-70},
 					{425,510-50,-70}, {160,520-50,-70},
 
@@ -44,8 +44,7 @@ GLfloat colorsd[][3] = {{1.0,1.0,0.0},{0.0,0.6,0.7},{.3,.4,.5}};
 void frontpg()
 {
 	glEnable(GL_TEXTURE_2D);
-
-		/*background*/
+    /*background*/
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	tex_2d2 = SOIL_load_OGL_texture
 		 (
@@ -67,7 +66,7 @@ void frontpg()
 		glVertex2f(1000,650);
 	glEnd();
 
-/*sidewalk*/
+    /*sidewalk*/
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	tex_2d2 = SOIL_load_OGL_texture
 		 (
@@ -88,11 +87,7 @@ void frontpg()
 		glTexCoord2f(1.0, 0.0);
 		glVertex2f(1000,415);
 	glEnd();
-
-
     glDisable(GL_TEXTURE_2D);
-    //glutSwapBuffers();
-    //glFlush();
 }
 
 void drawStrokeText(char *string, int x, int y, int z)
@@ -100,15 +95,6 @@ void drawStrokeText(char *string, int x, int y, int z)
     glPushMatrix();
     glTranslatef(x,y+8,z);
     glScalef(0.33f,0.33f,z);
-    glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)string);
-    glPopMatrix();
-}
-
-void PS_Text(char *string, int x, int y, int z)
-{
-    glPushMatrix();
-    glTranslatef(x,y+8,z);
-    glScalef(0.065f,0.065f,z);
     glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)string);
     glPopMatrix();
 }
@@ -151,6 +137,16 @@ void text()
         drawBitmapText1("Press x to start the scene",50,20);
     }
     if(screen == 3 && flag2 == 1 && x2 == 1000)
+    {
+        glColor3f(1,1,1);
+        drawBitmapText1("Press left mouse button to move to next scene",50,20);
+    }
+    if(screen == 5 && flag4 == 0)
+    {
+        glColor3f(1,1,1);
+        drawBitmapText1("Press x to start the scene",50,20);
+    }
+    if(screen == 5 && flag4 == 1 && x4 == -1000)
     {
         glColor3f(1,1,1);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
@@ -1679,16 +1675,16 @@ void pepper_spray()
 {
     glPushMatrix();
     glColor3ub(80,80,80);
-    glTranslatef(705,437,0);
-    glutSolidTorus(4,4,200,190);
+    glTranslatef(710,438,0);
+    glutSolidTorus(3,3,200,190);
     glPopMatrix();
     glColor3f(1,0,0);
     glBegin(GL_POLYGON);
         glColor3f(0.9,0.9,0.2);
-        glVertex2d(696,400);
-        glVertex2d(713,400);
+        glVertex2d(705,410);
+        glVertex2d(713,410);
         glVertex2d(713,435);
-        glVertex2d(696,435);
+        glVertex2d(705,435);
     glEnd();
 }
 
@@ -1710,6 +1706,32 @@ void road()
         glVertex2d(700,280);
     glEnd();
     glDisable(GL_LINE_STIPPLE);
+}
+
+void press_spray()
+{
+    int i;
+    for(i=0;i<5;i++)
+    {
+        glBegin(GL_LINES);
+            glVertex2d(687+i,445+i);
+            glVertex2d(631+i,465+i);
+        glEnd();
+    }
+}
+
+void scene4_translate()
+{
+    if(x4>-1000)
+    {
+        x4 -= 2;
+        glPushMatrix();
+        glTranslatef(300+x4,0,0);
+        man();
+        glPopMatrix();
+    }
+    if(x4 == -1000)
+        text();
 }
 
 void scene_1()
@@ -1818,28 +1840,30 @@ void scene_5()
 
     glPushMatrix();
     road2d();
+    text();
     glPushMatrix();
     glTranslated(200,0,0);
     woman4();
     glPopMatrix();
-    glPushMatrix();
-    glTranslated(300,0,0);
-    man();
-    glPopMatrix();
+    if(flag4 == 0)
+    {
+        glPushMatrix();
+        glTranslated(300,0,0);
+        man();
+        glPopMatrix();
+    }
     glPushMatrix();
     glTranslatef(696,400,0);
     glRotatef(20,0,0,1);
     glTranslatef(-696,-400,0);
     pepper_spray();
     glPopMatrix();
-    glPushMatrix();
-    glTranslatef(700,410,0);
-    glRotatef(110,0,0,1);
-    glTranslatef(-700,-410,0);
-    glColor3f(0,0,0);
-    PS_Text("Pepper",698,402,0);
-    PS_Text("spray",698,395,0);
-    glPopMatrix();
+    if(flag4 == 1)
+    {
+        if(x4>-20)
+            press_spray();
+        scene4_translate();
+    }
     glPopMatrix();
 }
 
@@ -1884,6 +1908,8 @@ void keys(unsigned char key,int x,int y)
         flag1 = 1;
     if(key == 'x' && screen == 3)
         flag2 = 1;
+    if(key == 'x' && screen == 5)
+        flag4 = 1;
 }
 
 void menu(int id)
@@ -1941,6 +1967,8 @@ void display(void)
         scene_6();
     if(screen==7)
         scene_7();
+    if(screen>7)
+        exit(0);
     glutSwapBuffers();
 }
 
