@@ -113,42 +113,42 @@ void text()
 {
     if(screen == 1 && flag == 0)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press x to start the scene",50,20);
     }
     if(screen == 1 && flag == 1 && x == 1000)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
     }
     if(screen == 2 && flag1 == 0)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press x to start the scene",50,20);
     }
     if(screen == 2 && flag1 == 1 && _y1 > 310)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
     }
     if(screen == 3 && flag2 == 0)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press x to start the scene",50,20);
     }
     if(screen == 3 && flag2 == 1 && x2 == 1000)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
     }
     if(screen == 5 && flag4 == 0)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press x to start the scene",50,20);
     }
     if(screen == 5 && flag4 == 1 && x4 == -1000)
     {
-        glColor3f(1,1,1);
+        glColor3f(0,0,0);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
     }
 }
@@ -1446,6 +1446,92 @@ void shrubd(int xtrans)
 	glPopMatrix();
 }
 
+void grass1()
+{
+    glColor3ub(0,160,0);
+    glBegin(GL_TRIANGLES);
+        glVertex2d(100,10+10);
+        glVertex2d(95-5,50+10);
+        glVertex2d(105,15+10);
+        glVertex2d(100,10+10);
+        glVertex2d(85-5,45+10);
+        glVertex2d(103,15+10);
+        glVertex2d(100,10+10);
+        glVertex2d(108-5,60+10);
+        glVertex2d(110,20);
+        glVertex2d(108-3,20);
+        glVertex2d(116,55+10);
+        glVertex2d(114,20);
+        glVertex2d(112,20);
+        glVertex2d(124,45+10);
+        glVertex2d(118,20);
+        glVertex2d(116,20);
+        glVertex2d(132,35+10);
+        glVertex2d(122,20);
+    glEnd();
+}
+
+void grass()
+{
+    glBegin(GL_POLYGON);
+        glColor3f(0.6,1,0);
+        glVertex2d(0,10);
+        glColor3f(0.4,1,0);
+        glVertex2d(1000,10);
+        glColor3f(0.6,1,0);
+        glVertex2d(1000,200);
+        glColor3f(0.4,1,0);
+        glVertex2d(0,200);
+    glEnd();
+    glPushMatrix();
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-40,80,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(60+10,60,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(100+60,40+70,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(120+120,20+10,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(160+150,80+10,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(180+230,50+10,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(60+10+400,60,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(100+60+400,40+70,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(120+120+400,20+10,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(160+150+400,80+10,0);
+    grass1();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(180+230+400,50+10,0);
+    grass1();
+    glPopMatrix();
+}
+
 void woman4()
 {
 	//face
@@ -1746,8 +1832,9 @@ void scene_1()
     road2d();
     man();
     tree();
-    text();
     shrubd(0);
+    grass();
+    text();
     glPushMatrix();
     glTranslatef(800,0,0);
     tree();
@@ -1771,9 +1858,10 @@ void scene_2()
     bus_stop();
     lamp_post();
     road2d();
-    text();
     tree();
     shrubd(0);
+    grass();
+    text();
     glPushMatrix();
     glTranslatef(800,0,0);
     tree();
@@ -1809,6 +1897,7 @@ void scene_3()
 
     glPushMatrix();
     road2d();
+    grass();
     text();
     if(x2 < 390)
     {
@@ -1840,6 +1929,7 @@ void scene_5()
 
     glPushMatrix();
     road2d();
+    grass();
     text();
     glPushMatrix();
     glTranslated(200,0,0);
@@ -1873,6 +1963,7 @@ void scene_6()
 	frontpg();
     glPopMatrix();
     road();
+    grass();
     glPushMatrix();
     glTranslated(10,-100,0);
     woman();
