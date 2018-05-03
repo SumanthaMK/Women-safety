@@ -109,6 +109,16 @@ void drawBitmapText1(char *string, float x, float y)
     }
 }
 
+void drawBitmapText2(char *string, float x, float y)
+{
+    char *c;
+    glRasterPos2f(x,y);
+    for (c=string; *c != '\0'; c++)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12,*c);
+    }
+}
+
 void text()
 {
     if(screen == 1 && flag == 0)
@@ -1820,6 +1830,56 @@ void scene4_translate()
         text();
 }
 
+void text1()
+{
+    if(screen != 4)
+    {
+        glColor3f(1,1,1);
+        glBegin(GL_POLYGON);
+            glVertex2d(310,170);
+            glVertex2d(700,170);
+            glVertex2d(700,230);
+            glVertex2d(310,230);
+        glEnd();
+    }
+    glColor3f(0,0,0);
+    if(screen == 1)
+    {
+        drawBitmapText2("It is late at night. A girl gets down from the bus after a long day",330,210);
+        drawBitmapText2("at work.There is another guy present at the bus stop.",350,180);
+    }
+    if(screen == 2)
+    {
+        drawBitmapText2("As the girl cautiously starts walking towards her home,",360,210);
+        drawBitmapText2("the guy starts following her.",430,180);
+    }
+    if(screen == 3)
+    {
+        drawBitmapText2("As soon as they reach a lonely, secluded area,",370,210);
+        drawBitmapText2("a car rushes to the spot and the girl is kidnapped.",370,180);
+    }
+    if(screen == 4)
+    {
+        glColor3f(1,1,0);
+        drawStrokeText("Crimes against women",280,580,0);
+        drawStrokeText("are common in our society today.",160,520,0);
+        drawStrokeText("It is the responsibilty",305,380,0);
+        drawStrokeText("of both men and women",260,320,0);
+        drawStrokeText("to understand how they react",210,260,0);
+        drawStrokeText("in such a situation.",330,200,0);
+    }
+    if(screen == 5)
+    {
+        drawBitmapText2("It is not long before the girl realizes she is being followed.",340,210);
+        drawBitmapText2("She reaches out to her pepper spray and uses it to protect herself.",320,180);
+    }
+    if(screen == 6)
+    {
+        drawBitmapText2("The guy notices that the girl is alone,",400,210);
+        drawBitmapText2("and escorts her to ensure that she safely reaches home.",360,180);
+    }
+}
+
 void scene_1()
 {
     glPushMatrix();
@@ -1843,6 +1903,7 @@ void scene_1()
     shrubd(80);
     shrubd(820);
     shrubd(900);
+    text1();
     if(flag == 1)
         bus_move();
     glPopMatrix();
@@ -1870,6 +1931,7 @@ void scene_2()
     shrubd(80);
     shrubd(820);
     shrubd(900);
+    text1();
     if(x1 == 12)
     {
         glPushMatrix();
@@ -1899,6 +1961,7 @@ void scene_3()
     road2d();
     grass();
     text();
+    text1();
     if(x2 < 390)
     {
         glPushMatrix();
@@ -1917,8 +1980,11 @@ void scene_3()
 
 void scene_4()
 {
+    glPushMatrix();
     glColor3f(1,1,1);
+    text1();
     drawBitmapText1("Press right mouse button to view the menu",50,20);
+    glPopMatrix();
 }
 
 void scene_5()
@@ -1931,6 +1997,7 @@ void scene_5()
     road2d();
     grass();
     text();
+    text1();
     glPushMatrix();
     glTranslated(200,0,0);
     woman4();
@@ -1981,6 +2048,7 @@ void scene_6()
     glTranslatef(200,35,0);
     building();
     glPopMatrix();
+    text1();
 }
 
 void scene_7()
