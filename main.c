@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/freeglut.h>
@@ -41,6 +42,31 @@ GLfloat verticesd[][3] ={{160,390-175,-70},{425,390-175,-70},
 
 GLfloat colorsd[][3] = {{1.0,1.0,0.0},{0.0,0.6,0.7},{.3,.4,.5}};
 
+void title(){
+	glEnable(GL_TEXTURE_2D);
+	/*title page*/
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	tex_2d2 = SOIL_load_OGL_texture
+		 (
+			 "front.png",
+			 SOIL_LOAD_AUTO,
+			 SOIL_CREATE_NEW_ID,
+			 SOIL_FLAG_COMPRESS_TO_DXT
+		 );
+	glBindTexture(GL_TEXTURE_2D, tex_2d2);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBegin(GL_POLYGON);
+		glTexCoord2f(1.0, 1.0);
+		glVertex2f(1000,0);
+		glTexCoord2f(0.0, 1.0);
+		glVertex2f(0,0);
+		glTexCoord2f(0.0, 0.0);
+		glVertex2f(0,650);
+		glTexCoord2f(1.0, 0.0);
+		glVertex2f(1000,650);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
 void frontpg()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -88,6 +114,32 @@ void frontpg()
 		glVertex2f(1000,415);
 	glEnd();
     glDisable(GL_TEXTURE_2D);
+}
+
+void last_page(){
+	glEnable(GL_TEXTURE_2D);
+	/*last page*/
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	tex_2d2 = SOIL_load_OGL_texture
+		 (
+			 "last.png",
+			 SOIL_LOAD_AUTO,
+			 SOIL_CREATE_NEW_ID,
+			 SOIL_FLAG_COMPRESS_TO_DXT
+		 );
+	glBindTexture(GL_TEXTURE_2D, tex_2d2);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBegin(GL_POLYGON);
+		glTexCoord2f(1.0, 1.0);
+		glVertex2f(1000,0);
+		glTexCoord2f(0.0, 1.0);
+		glVertex2f(0,0);
+		glTexCoord2f(0.0, 0.0);
+		glVertex2f(0,650);
+		glTexCoord2f(1.0, 0.0);
+		glVertex2f(1000,650);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
 }
 
 void drawStrokeText(char *string, int x, int y, int z)
@@ -172,15 +224,19 @@ void mouse(int btn,int state,int x,int y)
 }
 void first_screen()
 {
+    glPushMatrix();
+	title();
+    glPopMatrix();
     glColor3f(1.0,0.5,0.0);
-    drawStrokeText("Women's Safety",360,500,0);
-    drawBitmapText1("A short animation story",430,470);
+    drawStrokeText("Women Safety",130,570,0);
+    glColor3f(1.0,0.3,0.0);
+    drawBitmapText1("A short animation story",130,540);
     glColor3f(1.0,1.0,1.0);
-    drawBitmapText1("Done by-",480,200);
-    drawBitmapText1("Chehak Nayar",300,150);
-    drawBitmapText1("K V Bhavana",300,120);
-    drawBitmapText1("1PE15CS042",610,150);
-    drawBitmapText1("1PE15CS063",610,120);
+    drawBitmapText1("Done by-",130,400);
+    drawBitmapText1("Chehak Nayar",130,350);
+    drawBitmapText1("K V Bhavana",130,320);
+    drawBitmapText1("1PE15CS042",260,350);
+    drawBitmapText1("1PE15CS063",260,320);
     glColor3f(0.0,1.0,0.0);
     drawBitmapText1("Press left mouse button to move to next screen",580,20);
 }
@@ -2053,10 +2109,13 @@ void scene_6()
 
 void scene_7()
 {
+    glPushMatrix();
+    last_page();
+    glPopMatrix();
     glColor3f(1,1,0);
     glLineWidth(3.0);
-    drawStrokeText("Respect",350+40,350,0);
-    drawStrokeText("Women",380+60,300,0);
+    drawStrokeText("Respect",350,350-220,0);
+    drawStrokeText("Women",350,300-220,0);
 }
 
 void keys(unsigned char key,int x,int y)
@@ -2156,3 +2215,5 @@ int main(int argc, char* argv[])
     glutMainLoop();
     return 0;
 }
+
+
