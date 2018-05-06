@@ -208,18 +208,21 @@ void text()
         glColor3f(0,0,0);
         drawBitmapText1("Press x to start the scene",50,20);
     }
-    if(screen == 5 && flag4 == 1 && x4 == -1000)
+    /*if(screen == 5 && flag4 == 1 && x4 == -1000)
     {
         glColor3f(0,0,0);
         drawBitmapText1("Press left mouse button to move to next scene",50,20);
-    }
+    }*/
 }
 
 void mouse(int btn,int state,int x,int y)
 {
     if(btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        screen++;
-        glutPostRedisplay();
+        if(screen != 5)
+        {
+            screen++;
+            glutPostRedisplay();
+        }
     }
 }
 void first_screen()
@@ -228,9 +231,9 @@ void first_screen()
 	title();
     glPopMatrix();
     glColor3f(1.0,0.5,0.0);
-    drawStrokeText("Women Safety",130,570,0);
+    drawStrokeText("Women Safety",130,580,0);
     glColor3f(1.0,0.3,0.0);
-    drawBitmapText1("A short animation story",130,540);
+    drawBitmapText1("A short animation story",130,560);
     glColor3f(1.0,1.0,1.0);
     drawBitmapText1("Done by-",130,400);
     drawBitmapText1("Chehak Nayar",130,350);
@@ -2164,9 +2167,11 @@ void menu(int id)
         {
             case 1: screen = 1;
                     break;
-            case 2: screen = 5;
+            case 2: screen = 4;
                     break;
-            case 3: screen = 6;
+            case 3: screen = 5;
+                    break;
+            case 4: screen = 6;
                     break;
             default: exit(0);
         }
@@ -2227,10 +2232,11 @@ int main(int argc, char* argv[])
     glEnable(GL_LIGHT0);
     glutCreateWindow("CG Project");
     int submenu = glutCreateMenu(menu);
-    glutAddMenuEntry("Female perspective",2);
-    glutAddMenuEntry("Male perspective",3);
+    glutAddMenuEntry("Female perspective",3);
+    glutAddMenuEntry("Male perspective",4);
     glutCreateMenu(menu);
     glutAddMenuEntry("Move back to scene 1",1);
+    glutAddMenuEntry("Go back",2);
     glutAddSubMenu("What should be done?",submenu);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
     glutDisplayFunc(display);
